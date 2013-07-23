@@ -6,9 +6,13 @@ struct
    fun test_success str = 
    let
       val sv = SemVer.fromString str
+      
+      (* Makes sure the 'validate' method gets run *)
+      val sv' = SemVer.semver (SemVer.data sv)
+
       val str' = SemVer.toString sv
    in
-      EQUAL = SemVer.compare (sv, sv) (* For good measure... *)
+      EQUAL = SemVer.compare (sv, sv') (* For good measure... *)
       andalso str = str'
    end handle _ => false
 
@@ -68,6 +72,120 @@ struct
    end
 
    val () = testfile "semver.tests"
+
+   (* Other tests *)
+
+   fun test_validate_failure svdata = 
+   let
+      val sv = SemVer.semver svdata
+   in
+      false
+   end handle SemVer.InvalidSemVer => true 
+
+   val () = Testing.expect { major = ~1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = [] }
+               test_validate_failure
+               "Negative major version"
+
+   val () = Testing.expect { major = 1
+                           , minor = ~1
+                           , patch = 1
+                           , release = []
+                           , build = [] }
+               test_validate_failure
+               "Negative minor version"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = ~1
+                           , release = []
+                           , build = [] }
+               test_validate_failure
+               "Negative patch version"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = [""]
+                           , build = [] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = ["a", ""]
+                           , build = [] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = ["", "a"]
+                           , build = [] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = ["a", "", "b"]
+                           , build = [] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = ["+"]
+                           , build = [] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = [""] }
+               test_validate_failure
+               "Bad build"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = ["a", ""] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = ["", "a"] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = ["a", "", "b"] }
+               test_validate_failure
+               "Bad release"
+
+   val () = Testing.expect { major = 1
+                           , minor = 1
+                           , patch = 1
+                           , release = []
+                           , build = ["+"] }
+               test_validate_failure
+               "Bad release"
+
    val () = Testing.report ()
    val () = Testing.reset ()
 
