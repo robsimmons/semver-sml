@@ -6,7 +6,9 @@ A Semantic Versioning library for Standard ML, currently based on
 
 This implementation aims to be a strict and straightforward
 implementation of the standard (so no messing around with
-maybe-allowing the leading 'v'). The files [semver.tests] and
-[[semver-big.tests]] aim to capture some general-purpose test cases.
+maybe-allowing the leading 'v'). The files
+[semver.tests](semver.tests) and [semver-big.tests](semver-big.tests)
+aim to capture some general-purpose tests for semantic versioning
+implementations.
 
 
