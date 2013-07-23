@@ -11,4 +11,27 @@ maybe-allowing the leading 'v'). The files
 aim to capture some general-purpose tests for semantic versioning
 implementations.
 
+Test file format
+----------------
 
+The test cases are in a zero-or-one-test-per-line format, where the
+`#` character acts like a line comment. The first character indicates
+the sort of test.
+
+* `Y` - expect a valid semver
+* `N` - expect an invalid semver
+* `<` - expect two valid semvers, the second with higher precedence
+* `>` - expect two valid semvers, the first with higher precedence
+* `=` - expect two valid semvers with equal precedence
+
+```
+<possible-semver-char> ::= any non-whitespace chararcter except "#"
+<possible-semver> ::= <possible-semver-char>
+                      <possible-semver-char> <possible-semver>
+
+<test> ::= "Y" <whitespace> <possible-semver>
+           "N" <whitespace> <possible-semver>
+           "<" <whitespace> <possible-semver> <whitespace> <possible-semver>
+           ">" <whitespace> <possible-semver> <whitespace> <possible-semver>
+           "=" <whitespace> <possible-semver> <whitespace> <possible-semver>
+```
