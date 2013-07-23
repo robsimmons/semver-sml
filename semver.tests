@@ -15,7 +15,7 @@
 #   have equal precedence.
 
 # Tests taken from coolaj86's semver-utils
-# https://github.com/coolaj86/semver-utils/
+# https://github.com/coolaj86/semver-utils/blob/master/semver-utils-test.js
 Y 1.0.8
 Y 1.23.7
 Y 2.0.0-alpha.123.abc
