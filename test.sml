@@ -72,6 +72,7 @@ struct
    end
 
    val () = testfile "semver.tests"
+   val () = testfile "semver-big.tests"
 
    (* Other tests *)
 

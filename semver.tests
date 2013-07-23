@@ -126,6 +126,11 @@ N ~1.2.2
 N 2.~1.2
 N 2.2.~1
 
+# Strictly interpreting the spec, there is no room for a leading 'v'
+N v2.2.1
+N v
+N random-nonsense
+
 # Leading zeros not allowed in main spec
 N 01.2.2
 N 2.01.2
