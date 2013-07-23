@@ -1,0 +1,6 @@
+Group is
+  $SMACKAGE/cmlib/v2/cmlib.cm
+  $SMACKAGE/cmlib/v2/tests/testing.cm
+  semver-sig.sml
+  semver.sml
+  test.sml

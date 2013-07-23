@@ -1,0 +1,142 @@
+# File format: ASCII only, pound signs can be used as line comments, empty 
+# lines are ignored.
+
+# (The setup of these tests doesn't allow us to test invalid semvers with pound
+# signs or whitespace, such as '1.2.4+oh#no' or '1.2.4-oh no'... so don't 
+# accept those either.)
+
+# Lines beginning with 'Y' are single good semvars
+# Lines beginning with 'N' are bad semvars 
+# Lines beginning with '>' are followed by two [valid] semvers, the first of 
+#   which should have higher precedence
+# Lines beginning with '<' are followed by two [valid] semvers, the second of 
+#   which should have higher precedence
+# Lines beginning with '=' are followed by two [valid] semvers which should
+#   have equal precedence.
+
+# Tests taken from coolaj86's semver-utils
+Y 1.0.8
+Y 1.23.7
+Y 2.0.0-alpha.123.abc
+Y 2.0.0-alpha.123.abc+build.acebfde1284
+Y 1.0.0-alpha
+Y 1.0.0-alpha.1
+Y 1.0.0-0.3.7
+Y 1.0.0-x.7.z.92
+Y 1.0.0-alpha
+Y 1.0.0-alpha.1
+Y 1.0.0-beta.2
+Y 1.0.0-beta.11
+Y 1.0.0-rc.1
+Y 1.0.0-rc.1+build.1
+Y 1.0.0-rc.1+build.1-b
+Y 1.0.0
+Y 1.0.0+0.3.7
+Y 1.3.7+build
+Y 1.3.7+build.2.b8f12d7
+Y 1.3.7+build.11.e0f985a
+Y 1.3.7+build.11.e0f9-85a
+Y 1.0.0+build-acbe
+Y 2.0.0+build.acebfde1284-alpha.123.abc
+N a.b.c
+N 1
+N 1.0.0b
+N 1.0
+N 1.0.0+b[\]^_`uild        # [,\,],^,_,` are between A-z, but not A-Za-z
+N 1.0.0+b^uild
+N 1.0.0+build-acbe.        # trailing period
+N 1.0.0+build.!@#$%
+
+# Comparison tests from isaacs's node-semver
+# https://github.com/isaacs/node-semver/blob/master/test/index.js
+> 0.0.0 0.0.0-foo
+> 0.0.1 0.0.0
+> 1.0.0 0.9.9
+> 0.10.0 0.9.0
+> 0.99.0 0.10.0
+> 2.0.0 1.2.3
+> 0.0.0 0.0.0-foo
+> 0.0.1 0.0.0
+> 1.0.0 0.9.9
+> 0.10.0 0.9.0
+> 0.99.0 0.10.0
+> 2.0.0 1.2.3
+> 0.0.0 0.0.0-foo
+> 0.0.1 0.0.0
+> 1.0.0 0.9.9
+> 0.10.0 0.9.0
+> 0.99.0 0.10.0
+> 2.0.0 1.2.3
+> 1.2.3 1.2.3-asdf
+> 1.2.3 1.2.3-4
+> 1.2.3 1.2.3-4-foo
+> 1.2.3-5-foo 1.2.3-5
+> 1.2.3-5 1.2.3-4
+> 1.2.3-5-foo 1.2.3-5-Foo
+> 3.0.0 2.7.2+asdf
+> 1.2.3-a.10 1.2.3-a.5
+> 1.2.3-a.b 1.2.3-a.5
+> 1.2.3-a.b 1.2.3-a
+> 1.2.3-a.b.c.10.d.5 1.2.3-a.b.c.5.d.100
+= 1.2.3 1.2.3
+= 1.2.3-0 1.2.3-0
+= 1.2.3-1 1.2.3-1
+= 1.2.3-beta 1.2.3-beta
+= 1.2.3-beta+build 1.2.3-beta+otherbuild
+= 1.2.3+build 1.2.3+otherbuild
+= 1.2.3-beta+build 1.2.3-beta+otherbuild
+
+# More tests
+Y 1.0.0--    # Release '-'
+Y 1.0.0--+-  # Release '-', build '-'
+N 1.0.0-+-   # Empty build
+N 1.0.0--+   # Empty release
+N 1.0.0-.    # Zero-length identifiers in release
+N 1.0.0-a.
+N 1.0.0-.a
+N 1.0.0+.    # Zero-length identifiers in release
+N 1.0.0+a.
+N 1.0.0+.a
+
+N 1.0.
+N 1..1
+N .1.1
+N ..
+N 1..
+N .1.
+N ..1
+N 1.0.+b
+N 1..1+b
+N .1.1+b
+N ..+b
+N 1..+b
+N .1.+b
+N ..1+b
+N 1.0.-b
+N 1..1-b
+N .1.1-b
+N ..-b
+N 1..-b
+N .1.-b
+N ..1-b
+N -1.2.2
+N 2.-1.2
+N 2.2.-1
+N ~1.2.2
+N 2.~1.2
+N 2.2.~1
+
+# Leading zeros not allowed in main spec
+N 01.2.2
+N 2.01.2
+N 2.2.01
+Y 2.2.2+001 
+Y 2.2.2-001
+Y 2.2.2-a+001
+Y 2.2.2-001+a
+Y 2.2.2-001.001.a+02.b.2
+
+# Numeric comparison of tags
+< 1.1.1-0001a 1.1.1-01a
+= 1.1.1-0001  1.1.1-01
+= 1.1.1-009.008.007 1.1.1-9.8.7
