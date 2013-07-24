@@ -35,8 +35,9 @@ time.)
 The constraints `2` or `2.3` are basically the same as `~2` or `~2.3`
 from [node-semver](https://github.com/isaacs/node-semver). These
 constraints match the range `<= 2.0.0-0 < 3.0.0-0`, and `<= 2.3.0-0 <
-2.4.0-0`, respectively. However, given a list of possible versions the
-`SemVerConstraint.pick` will prefer version `2.3.1` to `2.4.0-alpha`.
+2.4.0-0`, respectively. However, given a list of possible versions, a
+fold using the `SemVerConstraint.pick` will prefer version `2.3.1` to
+`2.4.0-alpha`.
 
 The constraint `2.3.4` is not like `~2.3.4` in node-semver. It is
 equivalent to the range `<= 2.3.4-0 < 2.3.5-0`; it will only be
