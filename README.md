@@ -22,14 +22,15 @@ This package currently doesn't contain the traditional 'range'
 notation used in a lot of versioning libraries (see
 [node-semver](https://github.com/isaacs/node-semver) for an
 example). There's no reason someone couldn't implement it, but
-currently the package implements a variant of this idea
+currently the package implements a variant of this idea that is aimed
+at the way the Smackage utility uses semantic versioning.
 
 The Smackage utility uses constraints that are reflected in code
-paths: if you say that you need version 2 of the `widgets` package,
-you can look for it on your hard drive at
+paths: if you say that you need (some implementation of) version 2 of
+the `widgets` package, you can look for it on your hard drive at
 `$SMACKAGE/widgets/v2`. (This gets you out of dependency hell: you can
 actually have two incompatible versions of a utility at the same
-time.) 
+time.)
 
 The constraints `2` or `2.3` are basically the same as `~2` or `~2.3`
 from [node-semver](https://github.com/isaacs/node-semver). These
@@ -38,7 +39,7 @@ constraints match the range `<= 2.0.0-0 < 3.0.0-0`, and `<= 2.3.0-0 <
 `SemVerConstraint.pick` will prefer version `2.3.1` to `2.4.0-alpha`.
 
 The constraint `2.3.4` is not like `~2.3.4` in node-semver. It is
-equivalent to the range `<= 2.3.4-0 < 2.3.5`; it will only be
+equivalent to the range `<= 2.3.4-0 < 2.3.5-0`; it will only be
 satisfied a particular version (or its prereleases). This allows a
 specific release, and only a specific release, to be targeted.
 

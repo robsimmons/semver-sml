@@ -34,7 +34,7 @@ sig
     *
     * The pick function is intended to be used with fold (as in
     * List.foldr (SemVerConstraint.pick sv_constraint) NONE semvers) *)
-   val pick' : semver_constraint option
-               -> SemVer.t * SemVer.t option
-               -> SemVer.t option
+   val pick : semver_constraint option
+              -> SemVer.t * SemVer.t option
+              -> SemVer.t option
 end
