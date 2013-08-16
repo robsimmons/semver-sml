@@ -173,7 +173,7 @@ N 1.0.0alpha..
 N 1.0.0beta\"
 N 1.0.0=Aplay
 Y 1.0.0-alpha+beta # This is okay because "beta" is the build here
-N 1.0.0-alpha_beta
+N 1.0.0-alpha_beta # No underscores in semvers
 N 1.0.0-alpha.
 N 1.0.0-alpha..
 N 1.0.0-alpha..1
