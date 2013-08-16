@@ -3,4 +3,6 @@ Group is
   $SMACKAGE/cmlib/v2/tests/testing.cm
   semver-sig.sml
   semver.sml
+  constraint-sig.sml
+
   test.sml

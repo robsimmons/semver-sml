@@ -10,14 +10,14 @@ sig
    val fromString : string -> semver
    val toString : semver -> string
 
-   type semver_data = { major : IntInf.int
-                      , minor : IntInf.int
-                      , patch : IntInf.int
-                      , release : string list
-                      , build : string list }
-
-   val data : semver -> semver_data
-   val semver : semver_data -> semver
+   type semverData = { major : IntInf.int
+                     , minor : IntInf.int
+                     , patch : IntInf.int
+                     , release : string list
+                     , build : string list }
+                         
+   val semver : semverData -> semver
+   val data : semver -> semverData
 
    val major : semver -> IntInf.int
    val minor : semver -> IntInf.int

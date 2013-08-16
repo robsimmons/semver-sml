@@ -8,16 +8,21 @@ sig
    val fromString : string -> semver_constraint
    val toString : semver_constraint -> string
 
-   (* Valid constraints are only prefixes:
+   (* Valid constraints are prefixes
     * 2
     * 2.4
-    * 2.4.9
-    * 2.4.9-x
-    * 2.4.9-x.y.z.w ... *)
+    * 2.4.9 
+    * In other words, if minor = NONE, then patch = NONE as well. *)
    type semver_constraint_data = { major : IntInf.int
                                  , minor : IntInf.int option
-                                 , patch : IntInf.int option
-                                 , release : string list }
+                                 , patch : IntInf.int option }
+
+   val construct : semver_constraint_data -> semver_constraint
+   val data : semver_constraint -> semver_constraint_data
+
+   val major : semver_constraint -> IntInf.int
+   val minor : semver_constraint -> IntInf.int option
+   val patch : semver_constraint -> IntInf.int option
 
    (* A semver satisfies any constraint that it is a prefix of,
     * roughly speaking. So the semvers v2.5.6 and v2.0.0-rc12 both
@@ -33,7 +38,13 @@ sig
     * versions exist, use them.
     *
     * The pick function is intended to be used with fold (as in
-    * List.foldr (SemVerConstraint.pick sv_constraint) NONE semvers) *)
+    * List.foldr (SemVerConstraint.pick sv_constraint) NONE semvers).
+    * 
+    * Precondition: if the optional semver argument is given, it MUST
+    * satisfy the constraint given as an argument. (The mandatory
+    * semver argument doesn't need to satisfy the constraint - pick
+    * will check this argument for satsfaction.) *)
+
    val pick : semver_constraint option
               -> SemVer.t * SemVer.t option
               -> SemVer.t option

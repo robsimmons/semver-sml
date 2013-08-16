@@ -6,7 +6,7 @@ struct
                  , release : string list
                  , build : string list }
    type t = semver
-   type semver_data = semver
+   type semverData = semver
 
    exception InvalidSemVer
 
@@ -16,26 +16,36 @@ struct
       (#"a" <= c andalso c <= #"z") orelse
       (c = #"-")
 
-   fun valid_id id = 
+   fun valid_prerelease id = 
+   let val id' = explode id
+   in size id > 0 andalso List.all valid_id_char id'
+      andalso (case List.all Char.isDigit id' of
+                  true => (#"0" <> String.sub (id, 0) orelse id = "0")
+                | false => true) 
+   end
+
+   fun valid_build id = 
       size id > 0 andalso List.all valid_id_char (explode id)
- 
+       
    fun valid_version id =
       size id > 0 
       andalso (#"0" <> String.sub (id, 0) orelse id = "0")
       andalso List.all Char.isDigit (explode id)
 
-   (* I don't know why the SML/NJ typechecker must be told semver_data here *)
-   fun validate ({major, minor, patch, release, build}: semver_data) =
+   (* I don't know why the SML/NJ typechecker must be told semverData here *)
+   fun validate ({major, minor, patch, release, build}: semverData) =
    let in
     ( if major >= 0 then () else raise InvalidSemVer
     ; if minor >= 0 then () else raise InvalidSemVer
     ; if patch >= 0 then () else raise InvalidSemVer
-    ; app (fn id => (if valid_id id then () else raise InvalidSemVer)) release
-    ; app (fn id => (if valid_id id then () else raise InvalidSemVer)) build )
+    ; app (fn id => (if valid_prerelease id then () else raise InvalidSemVer)) 
+         release
+    ; app (fn id => (if valid_build id then () else raise InvalidSemVer)) 
+         build )
    end 
 
+   fun semver (x: semverData) = (validate x; x)
    fun data (x: semver) = x
-   fun semver (x: semver_data) = (validate x; x)
 
    fun toString {major, minor, patch, release, build} = 
    let
@@ -56,10 +66,10 @@ struct
       major_str^"."^minor_str^"."^patch_str^release_str^build_str
    end
 
-   fun dotted_ids_from_string str =  
+   fun dotted_from_string valid_fn str =  
    let val ids = String.fields (fn c => c = #".") str
    in 
-    ( app (fn id => (if valid_id id then () else raise InvalidSemVer)) ids
+    ( app (fn id => (if valid_fn id then () else raise InvalidSemVer)) ids
     ; ids)
    end
 
@@ -80,14 +90,16 @@ struct
       val (str, build) = 
          case String.fields (fn c => c = #"+") str of
             [str] => (str, [])
-          | [str, build] => (str, dotted_ids_from_string build)
+          | [str, build] => (str, dotted_from_string valid_build build)
           | _ => raise InvalidSemVer
 
       val (str, release) =
          case first #"-" str 0 (size str) of
             NONE => (str, [])
           | SOME i => (String.extract (str, 0, SOME i),
-                       dotted_ids_from_string (String.extract (str, i+1, NONE)))
+                       dotted_from_string 
+                          valid_prerelease 
+                          (String.extract (str, i+1, NONE)))
 
       val (major, minor, patch) = 
          case map version_from_string (String.fields (fn c => c = #".") str) of
