@@ -132,17 +132,64 @@ N v2.2.1
 N v
 N random-nonsense
 
-# Leading zeros not allowed in main spec
+# Leading zeros not allowed in main spec or prerelease dotteds
 N 01.2.2
 N 2.01.2
 N 2.2.01
 Y 2.2.2+001 
-Y 2.2.2-001
+N 2.2.2-001
 Y 2.2.2-a+001
-Y 2.2.2-001+a
-Y 2.2.2-001.001.a+02.b.2
+N 2.2.2-001+a
+N 2.2.2-001.001.a+02.b.2
 
 # Numeric comparison of tags
 < 1.1.1-0001a 1.1.1-01a
-= 1.1.1-0001  1.1.1-01
-= 1.1.1-009.008.007 1.1.1-9.8.7
+< 1.1.1-0002a 1.1.1-01a
+< 1.1.1-0001a 1.1.1-02a
+= 1.1.1+0001  1.1.1+01
+= 1.1.1+009.008.007 1.1.1+9.8.7
+= 1.1.1+009.008.007 1.1.1+9.9.9
+
+# Taken from Semver issue 149
+# https://github.com/mojombo/semver/issues/149
+
+Y 1.0.0-alpha
+Y 1.0.0-beta
+Y 1.0.0-alpha.beta
+Y 1.0.0-alpha.beta.1
+Y 1.0.0-alpha.1
+Y 1.0.0-alpha0.valid
+Y 1.0.0-alpha.0valid
+
+N 1.0.0Above-Me-Is-All-Valid
+N 1.0.0-invalid.01
+N 1.0.0alpha.beta
+N 1.0.0alpha.beta.1
+N 1.0.0alpha.1
+N 1.0.0alpha+beta
+N 1.0.0alpha_beta
+N 1.0.0alpha.
+N 1.0.0alpha..
+N 1.0.0beta\"
+N 1.0.0=Aplay
+Y 1.0.0-alpha+beta # This is okay because "beta" is the build here
+N 1.0.0-alpha_beta
+N 1.0.0-alpha.
+N 1.0.0-alpha..
+N 1.0.0-alpha..1
+N 1.0.0-alpha...1
+N 1.0.0-alpha....1
+N 1.0.0-alpha.....1
+N 1.0.0-alpha......1
+N 1.0.0-alpha.......1
+
+N 1.0.0-.alpha
+Y 1.0.0--alpha.beta
+
+# Taken from Semver issue 147
+
+Y 1.0.0-alpha.-
+Y 1.0.0--
+Y 1.0.0----
+Y 1.0.0-123.---.-
+Y 1.0.0-123.ab--cd
